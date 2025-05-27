@@ -35,8 +35,8 @@ DGST_FILE="v2ray-linux-${ARCH}.zip.dgst"
 echo "Downloading binary file: ${V2RAY_FILE}"
 echo "Downloading binary file: ${DGST_FILE}"
 
-wget -O ${PWD}/v2ray.zip https://github.com/v2fly/v2ray-core/releases/download/${TAG}/${V2RAY_FILE} > /dev/null 2>&1
-wget -O ${PWD}/v2ray.zip.dgst https://github.com/v2fly/v2ray-core/releases/download/${TAG}/${DGST_FILE} > /dev/null 2>&1
+wget -O ${PWD}/v2ray.zip https://github.com/v2fly/v2ray-core/releases/download/${TAG}/${V2RAY_FILE} # Removed > /dev/null 2>&1 for better debug
+wget -O ${PWD}/v2ray.zip.dgst https://github.com/v2fly/v2ray-core/releases/download/${TAG}/${DGST_FILE} # Removed > /dev/null 2>&1 for better debug
 
 if [ $? -ne 0 ]; then
     echo "Error: Failed to download binary file: ${V2RAY_FILE} ${DGST_FILE}" && exit 1
@@ -60,21 +60,13 @@ echo "Prepare to use"
 unzip v2ray.zip && chmod +x v2ray
 mv v2ray /usr/bin/
 mv geosite.dat geoip.dat /usr/local/share/v2ray/
-mv config.json /etc/v2ray/config.json
+mv config.json /etc/v2ray/config.json # This moves the config.json copied to WORKDIR by Dockerfile
 
-# -- Choreo: Prepare for non-root user --
-V2RAY_USER_UID=10001
-V2RAY_USER_GID=10001
-addgroup -g ${V2RAY_USER_GID} v2raygroup
-adduser -D -u ${V2RAY_USER_UID} -G v2raygroup v2rayuser
-
-chown -R v2rayuser:v2raygroup /etc/v2ray
-chown -R v2rayuser:v2raygroup /usr/local/share/v2ray
-chown -R v2rayuser:v2raygroup /var/log/v2ray
-chown v2rayuser:v2raygroup /usr/bin/v2ray
-
-chmod +x /usr/bin/v2ray
-# -- End Choreo user preparation --
+# 移除之前为 Choreo 添加的 USER/GROUP 创建和 CHOWN 命令，这些已移至 Dockerfile
+# V2RAY_USER_UID=10001 ... (删除这些行)
+# addgroup ... (删除这些行)
+# adduser ... (删除这些行)
+# chown ... (删除这些行)
 
 # Clean
 rm -rf ${PWD}/*
