@@ -1,0 +1,12 @@
+schemaVersion: 1.2
+
+endpoints:
+  - name: v2ray-websocket-endpoint  # 端点的唯一名称，用于Choreo内部识别
+    displayName: V2Ray WebSocket Service # 端点的显示名称
+    service:
+      basePath: /proxy  # !!!!!!! 与您 config.json 中 wsSettings.path 一致 !!!!!!!
+      port: 10000       # !!!!!!! 与您 config.json 中 port 一致 !!!!!!!
+    type: REST            # 对于 WebSocket 服务，Choreo 通常使用 REST 类型
+    networkVisibilities:
+      - Public            # 可选项: Public, Project, Organization, Private
+    # schemaFilePath: openapi.yaml # WebSocket 服务通常不需要 OpenAPI schema 文件
