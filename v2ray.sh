@@ -62,6 +62,20 @@ mv v2ray /usr/bin/
 mv geosite.dat geoip.dat /usr/local/share/v2ray/
 mv config.json /etc/v2ray/config.json
 
+# -- Choreo: Prepare for non-root user --
+V2RAY_USER_UID=10001
+V2RAY_USER_GID=10001
+addgroup -g ${V2RAY_USER_GID} v2raygroup
+adduser -D -u ${V2RAY_USER_UID} -G v2raygroup v2rayuser
+
+chown -R v2rayuser:v2raygroup /etc/v2ray
+chown -R v2rayuser:v2raygroup /usr/local/share/v2ray
+chown -R v2rayuser:v2raygroup /var/log/v2ray
+chown v2rayuser:v2raygroup /usr/bin/v2ray
+
+chmod +x /usr/bin/v2ray
+# -- End Choreo user preparation --
+
 # Clean
 rm -rf ${PWD}/*
 echo "Done"
