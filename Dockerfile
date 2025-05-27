@@ -6,7 +6,7 @@ LABEL maintainer="V2Fly Community <dev@v2fly.org>"
 WORKDIR /tmp
 ARG WORKDIR=/tmp # v2ray.sh 脚本可能会使用此变量
 ARG TARGETPLATFORM
-ARG TAG=v5.15.0 # <--- 在这里添加一个默认的 V2Ray 版本号
+ARG TAG
 
 # 复制脚本和 V2Ray 配置文件到工作目录
 # config.json 将由 v2ray.sh 移动到 /etc/v2ray/
@@ -26,7 +26,7 @@ RUN set -ex \
     && ln -sf /dev/stdout /var/log/v2ray/access.log \
     && ln -sf /dev/stderr /var/log/v2ray/error.log \
     && chmod +x "${WORKDIR}"/v2ray.sh \
-    && "${WORKDIR}"/v2ray.sh "${TARGETPLATFORM}" "${TAG}" # TAG 将会是 v5.15.0
+    && "${WORKDIR}"/v2ray.sh "${TARGETPLATFORM}" "${TAG}"
 
 # 创建一个非 root 用户，UID 在 Choreo 推荐的范围内 (10000-20000)
 # 这里我们使用 choreo 官方示例中的 UID 10014 和用户名 choreo
